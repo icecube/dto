@@ -16,8 +16,8 @@ RUN --mount=type=secret,id=GIT_AUTH_TOKEN <<EOF
    ls -laF /run/secrets
    GIT_AUTH_TOKEN=$(cat /run/secrets/GIT_AUTH_TOKEN)
    git config --global "url.https://${GIT_AUTH_TOKEN}@github.com.insteadof" "https://github.com"
-   git clone https://github.com/nega0/aoc2024.git /opt/aoc2024
-   ls -laF /opt/aoc2024
+   git clone https://github.com/icecube/reco.git /opt/reco
+   ls -laF /opt/reco
 EOF
 
 # RUN echo nt: ${NEGA_TOK}
