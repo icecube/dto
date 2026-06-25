@@ -1,0 +1,36 @@
+name: ci/cd
+
+on:
+  # only on branch pushes
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # don't cancel on main/master/default
+  cancel-in-progress: ${{ format('refs/heads/{0}', github.event.repository.default_branch) != github.ref }}
+
+jobs:
+  dep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}  # lock to triggered commit (github.ref is dynamic)
+
+      - uses: docker/build-push-action@v6
+        env: 
+          NEGA_TOK: ${{ secrets.NTT2 }}
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: skymap_scanner:py-dep-this-foo
+          load: true
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.NTT2 }}
+          build-args: INCLUDE_GCD=0  # for pip recording we don't need GCD files
+
