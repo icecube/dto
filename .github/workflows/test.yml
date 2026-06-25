@@ -23,14 +23,12 @@ jobs:
           ref: ${{ github.sha }}  # lock to triggered commit (github.ref is dynamic)
 
       - uses: docker/build-push-action@v6
-        env: 
-          NEGA_TOK: ${{ secrets.NTT2 }}
         with:
           context: .
           file: ./Dockerfile
           tags: skymap_scanner:py-dep-this-foo
           load: true
           secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.NEGA_TEST_TOKEN }}
+            GIT_AUTH_TOKEN=${{ secrets.ACTION_CLONE_TOKEN }}
           build-args: INCLUDE_GCD=0  # for pip recording we don't need GCD files
 
